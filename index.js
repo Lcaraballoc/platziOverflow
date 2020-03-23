@@ -1,12 +1,13 @@
 'use strict'
 
 const Hapi = require('hapi');
-const handlerbars = require('handlebars')
+const handlerbars = require('./lib/helpers')
 const inert = require('inert')
 const path = require('path');
 const vision = require('vision')
 const routes = require('./routes')
 const site = require('./controllers/site')
+const methods = require('./lib/methods')
 
 
 const server = Hapi.server({
@@ -23,6 +24,8 @@ async function init() {
     try {
         await server.register(inert)
         await server.register(vision)
+
+        server.method('setAnswerRight', methods.setAnswerRight)
 
         server.state('user', {
             ttl: 1000 * 60 * 60 * 24 * 7,
